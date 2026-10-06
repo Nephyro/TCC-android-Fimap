@@ -1,6 +1,6 @@
 # 📱 FIMAP Mobile - Aplicativo Android
 
-Repositório do aplicativo mobile do **FIMAP (Auxiliar Financeiro), desenvolvido como parte do Trabalho de Conclusão de Curso (TCC) do técnico em Desenvolvimento de Sistemas.
+Repositório do aplicativo mobile do **FIMAP** (Auxiliar Financeiro), desenvolvido como parte do Trabalho de Conclusão de Curso (TCC) do técnico em Desenvolvimento de Sistemas.
 
 ## 📋 Sobre o Projeto
 

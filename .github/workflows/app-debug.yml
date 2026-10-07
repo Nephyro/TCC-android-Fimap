@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APK - Fimap
 
 on:
   push:
@@ -26,18 +26,18 @@ jobs:
       - name: Dar permissão de execução ao Gradle
         run: chmod +x gradlew
 
-      - name: Construir o APK Debug
+      - name: Construir o APK Debug Fimap
         run: ./gradlew assembleDebug
         
-      - name: Publicar Release Automática com o APK
+      - name: Publicar Release Automática com o APK Fimap
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/') == false
         with:
           files: app/build/outputs/apk/debug/app-debug.apk
-          tag_name: v1.0-build
-          name: "Versão mais recente do app"
+          tag_name: fimap-debug
+          name: "Fimap - Versão mais recente (Debug)"
           body: |
-            APK gerado automaticamente pelo GitHub Actions a cada commit na branch principal a fim de visualizar o app durante o desenvolvimento.
+            APK do projeto **Fimap** gerado automaticamente pelo GitHub Actions a cada commit na branch principal a fim de visualizar o app durante o desenvolvimento.
             Último commit: ${{ github.sha }}  
           draft: false
           prerelease: false

@@ -2,32 +2,45 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "main" ]
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout do código
+        uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Dar permissão de execução ao Gradle
+        run: chmod +x gradlew
 
-    - name: Build Debug APK with Gradle
-      run: ./gradlew assembleDebug
-
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-debug
-        path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Construir o APK Debug
+        run: ./gradlew assembleDebug
+        
+      - name: Publicar Release Automática com o APK
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') == false
+        with:
+          files: app/build/outputs/apk/debug/app-debug.apk
+          tag_name: v1.0-build
+          name: "Versão mais recente do app"
+          body: |
+            APK gerado automaticamente pelo GitHub Actions a cada commit na branch principal a fim de visualizar o app durante o desenvolvimento.
+            Último commit: ${{ github.sha }}  
+          draft: false
+          prerelease: false
+          overwrite: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -30,4 +30,4 @@ O Fimap é uma aplicação voltada ao mercado financeiro para auxiliar usuários
 
 Você pode baixar o aplicativo mobile por aqui:
 
-[![Baixar APK Mais Recente](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)](https://github.com/Nephyro/TCC-android-Fimap/releases/tag/v1.0-build/app-debug.apk)
+[![Baixar APK Mais Recente](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)](https://github.com/Nephyro/TCC-android-Fimap/releases/tag/fimap-debug)

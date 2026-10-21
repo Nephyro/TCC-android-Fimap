@@ -45,6 +45,6 @@ object BiometricHelper {
     // Verifica se o dispositivo tem suporte a autenticação biométrica
     fun isBiometricAvailable(activity: FragmentActivity): Boolean {
         val biometricManager = BiometricManager.from(activity)      // Instância do BiometricManager
-        return biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+        return biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS     // Retorna true se o dispositivo tem suporte a autenticação biométrica
     }
 }

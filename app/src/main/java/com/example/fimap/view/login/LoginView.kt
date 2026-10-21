@@ -12,77 +12,48 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-//import androidx.compose.material.icons.filled.Visibility
-//import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fimap.R
-import com.example.fimap.R.drawable.fimap_logo
+import com.example.fimap.components.CustomTextField
+import com.example.fimap.components.FormCard
+import com.example.fimap.components.PasswordTextField
+import com.example.fimap.components.PrimaryButton
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    viewModel: LoginViewModel = viewModel()     // Instância do ViewModel
 ) {
     val scrollState = rememberScrollState()
-
-    var user by remember { mutableStateOf("") }
-
-    var password by remember { mutableStateOf("") }
-
-    var passwordVisible by remember { mutableStateOf(false) }
-
-    var isFocusedPerson by remember { mutableStateOf(false) }   // Variável para rastrear se o campo de usuário está focado
-
-    var isFocusedSenha by remember { mutableStateOf(false) }    // Variável para rastrear se o campo de senha está focado
-
-    var isSubmitted by remember { mutableStateOf(false) }   // Variável para rastrear se o formulário foi submetido
-
-    // Variáveis de erro para os campos (Usuário e Senha)
-    var isUserInvalid by remember { mutableStateOf(false) }
-    var isPasswordInvalid by remember { mutableStateOf(false) }
-
     val focusManager = LocalFocusManager.current
 
+    // Observa o estado que vem do ViewModel
+    val state by viewModel.uiState.collectAsState()
 
     Column(
         modifier = modifier
@@ -93,11 +64,8 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            modifier = Modifier
-                .size(120.dp),
-            painter = painterResource(
-                fimap_logo
-            ),
+            modifier = Modifier.size(120.dp),
+            painter = painterResource(R.drawable.fimap_logo),
             contentDescription = "logo app"
         )
 
@@ -119,167 +87,34 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.padding(20.dp))
 
-        Card(
-            modifier = Modifier
-                .width(350.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            ),
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
+        FormCard {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                OutlinedTextField(
-                    value = user,
-                    onValueChange = {
-                        user = it
-                        if (isSubmitted) isSubmitted = false
-                                    },
-                    singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.onFocusChanged { focusState -> isFocusedPerson = focusState.isFocused },
-                    label =  {
-                        Text(text = "Nome de usuário ou E-mail")
-                    },
-                    placeholder = {
-                        Text(text = "Seu usuário")
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Ícone pessoa",
-                            tint = when{
-                                isSubmitted && user.isEmpty() || isUserInvalid -> Color.Red
-                                isFocusedPerson -> Color.Blue
-                                else -> Color.Gray
-                            }
-                        )
-                    },
-                    isError = isSubmitted && (user.isEmpty() || isUserInvalid),
+                // Componente customizado (Usuário)
+                CustomTextField(
+                    value = state.user,
+                    onValueChange = { viewModel.onUserChange(it) },
+                    label = "Nome de usuário ou E-mail",
+                    placeholder = "Seu usuário",
+                    leadingIcon = Icons.Default.Person,
+                    errorMessage = state.userError,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down) // Move o foco para o próximo campo
-                        }
-                    ),
-
-                    supportingText = {
-                        if (isSubmitted && user.isEmpty()) {
-                            Text(
-                                text = "O campo usuário não pode estar vazio",
-                                color = Color.Red,
-                                fontSize = 12.sp
-                            )
-                    } else if (isUserInvalid) {
-                            Text(
-                                text = "Usuário inválido",
-                                color = Color.Red,
-                                fontSize = 12.sp
-                            )
-                        }
-                    },
-
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedLabelColor = Color.Blue,
-                        focusedBorderColor = Color.Blue,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                        errorTextColor = Color.Black
-                    )
+                    keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
                 )
 
-
-
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = {
-                        password = it
-                                    if (isSubmitted) isSubmitted = false
-                                    },
-                    singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.onFocusChanged { focusState -> isFocusedSenha = focusState.isFocused },
-                    label =  {
-                        Text(text = "Senha")
-                    },
-                    placeholder = {
-                        Text(text = "Sua senha")
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Lock,
-                            contentDescription = "Ícone pessoa",
-                            tint = when {
-                                isSubmitted && (password.isEmpty() || isPasswordInvalid) -> Color.Red
-                                isFocusedSenha -> Color.Blue
-                                else -> Color.Gray
-                            }
-                        )
-                    },
-
-                    trailingIcon = {
-                        val image = if (passwordVisible)
-                            painterResource(R.drawable.visibility)
-                        else
-                            painterResource(R.drawable.visibilityoff)
-
-                        val description = if (passwordVisible) "Ocultar senha" else "Mostrar senha"
-
-                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(
-                                painter = image,
-                                contentDescription = description,
-                                tint = when {
-                                    isSubmitted && (password.isEmpty() || isPasswordInvalid) -> Color.Red
-                                    isFocusedSenha -> Color.Blue
-                                    else -> Color.Gray
-                                }
-                            )
-                        }
-                    },
-
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
-                    ),
-
-                    keyboardActions = KeyboardActions(
-                        onDone = { focusManager.clearFocus() }
-                    ),
-
-                    isError = isSubmitted && (password.isEmpty() || isPasswordInvalid),
-
-                    supportingText = {
-                        if (isSubmitted && password.isEmpty()) {
-                            Text(
-                                text = "O campo senha não pode estar vazio",
-                                color = Color.Red,
-                                fontSize = 12.sp
-                            )
-                        } else if (isPasswordInvalid) {
-                            Text(
-                                text = "Senha inválida",
-                                color = Color.Red,
-                                fontSize = 12.sp
-                                )
-                        }
-                    },
-
-
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedLabelColor = Color.Blue,
-                        focusedBorderColor = Color.Blue,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                        errorTextColor = Color.Black
-                    )
+                // Componente customizado (Senha)
+                PasswordTextField(
+                    value = state.password,
+                    onValueChange = { viewModel.onPasswordChange(it) },
+                    placeholder = "Sua senha",
+                    errorMessage = state.passwordError,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
 
                 Text(
@@ -289,44 +124,24 @@ fun LoginScreen(
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate("")
+                            navController.navigate("cadastro")
                         }
                 )
 
-
-                Button(
+                // Componente customizado (Botão)
+                PrimaryButton(
+                    text = "Entrar",
+                    trailingIcon = Icons.Default.ArrowForward,
                     onClick = {
-                        isSubmitted = true
-
-                        if (password.isNotEmpty() && password.length < 8) {
-                            isPasswordInvalid = true
-                        } else {
-                            isPasswordInvalid = false
-                        }
-
-                        if (user.isNotEmpty() && password.isNotEmpty() && !isPasswordInvalid) {
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.White
-                    ),
-                    modifier = Modifier.width(250.dp),
-                    shape = RoundedCornerShape(10.dp)
-
-                ) {
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Entrar")
-                        Spacer(modifier = Modifier.width(5.dp))
-                        Icon(
-                            imageVector = Icons.Default.ArrowForward,
-                            contentDescription = "Ícone de seta",
-                            modifier = Modifier.size(20.dp)
+                        viewModel.login(
+                            onSuccess = { nomeDigitado ->
+                                navController.navigate("dashboard/$nomeDigitado") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            }
                         )
                     }
-                }
+                )
 
                 Spacer(modifier = Modifier.height(5.dp))
 
@@ -356,12 +171,9 @@ fun LoginScreen(
                     )
                 }
 
-
-
-
-
             }
         }
+
 
 
 

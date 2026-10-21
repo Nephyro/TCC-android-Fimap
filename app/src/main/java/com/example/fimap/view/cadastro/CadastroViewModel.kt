@@ -96,6 +96,7 @@ class CadastroViewModel(
                 userPreferences.saveUser(
                     name = state.name,
                     cpf = state.cpf,
+                    email = state.email,
                     username = state.username,
                     pass = state.password
                 )

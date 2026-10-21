@@ -20,6 +20,8 @@ class UserPreferences (private val context: Context) {
         // chaves para simular o cadastro
         val USER_NAME_KEY = stringPreferencesKey("user_name")
         val USER_CPF_KEY = stringPreferencesKey("user_cpf")
+
+        val USER_EMAIL_KEY = stringPreferencesKey("user_email")
         val USER_USERNAME_KEY = stringPreferencesKey("user_username")
         val USER_PASSWORD_KEY = stringPreferencesKey("user_password")
     }
@@ -33,6 +35,7 @@ class UserPreferences (private val context: Context) {
     // --- LEITURA DE DADOS DO USUÁRIO ---
     val userName: Flow<String> = context.dataStore.data.map { it[USER_NAME_KEY] ?: "" }
     val userCpf: Flow<String> = context.dataStore.data.map { it[USER_CPF_KEY] ?: "" }
+    val userEmail: Flow<String> = context.dataStore.data.map { it[USER_EMAIL_KEY] ?: "" }
     val userUsername: Flow<String> = context.dataStore.data.map { it[USER_USERNAME_KEY] ?: "" }
     val userPassword: Flow<String> = context.dataStore.data.map { it[USER_PASSWORD_KEY] ?: "" }
 
@@ -47,10 +50,11 @@ class UserPreferences (private val context: Context) {
     }
 
     // --- GRAVAÇÃO (Simulando o Cadastro) ---
-    suspend fun saveUser(name: String, cpf: String, username: String, pass: String) {
+    suspend fun saveUser(name: String, cpf: String, email: String, username: String, pass: String) {
         context.dataStore.edit { preferences ->
             preferences[USER_NAME_KEY] = name
             preferences[USER_CPF_KEY] = cpf
+            preferences[USER_EMAIL_KEY] = email
             preferences[USER_USERNAME_KEY] = username
             preferences[USER_PASSWORD_KEY] = pass
         }

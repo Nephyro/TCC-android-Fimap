@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -29,10 +30,11 @@ fun CustomTextField(
     leadingIcon: ImageVector,
     errorMessage: String? = null,    // se for nulo, não tem erro
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None  // Define se o texto é visível ou mascarado
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    val isError = errorMessage != null
+    val isError = errorMessage != null  // Indica se o campo está em estado de erro com base na presença de uma mensagem
 
     OutlinedTextField(
         value = value,
@@ -56,6 +58,7 @@ fun CustomTextField(
             )
         },
         isError = isError,
+        visualTransformation = visualTransformation,
         supportingText = {
             if (isError) {
                 Text(text = errorMessage!!, color = Color.Red, fontSize = 12.sp)

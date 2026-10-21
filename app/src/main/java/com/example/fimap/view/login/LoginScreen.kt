@@ -22,8 +22,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+//import androidx.compose.material.icons.filled.Visibility
+//import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -55,6 +55,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.fimap.R
 import com.example.fimap.R.drawable.fimap_logo
 
 @Composable
@@ -223,15 +224,15 @@ fun LoginScreen(
 
                     trailingIcon = {
                         val image = if (passwordVisible)
-                            Icons.Filled.Visibility
+                            painterResource(R.drawable.visibility)
                         else
-                            Icons.Filled.VisibilityOff
+                            painterResource(R.drawable.visibilityoff)
 
                         val description = if (passwordVisible) "Ocultar senha" else "Mostrar senha"
 
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
                             Icon(
-                                imageVector = image,
+                                painter = image,
                                 contentDescription = description,
                                 tint = when {
                                     isSubmitted && (password.isEmpty() || isPasswordInvalid) -> Color.Red

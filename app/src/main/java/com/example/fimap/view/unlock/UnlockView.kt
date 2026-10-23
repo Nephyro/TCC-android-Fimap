@@ -58,17 +58,16 @@ fun UnlockScreen(
         Image(
             painter = painterResource(id = R.drawable.fimap_logo),
             contentDescription = "Logo",
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(150.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Fimap", fontSize = 32.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Aplicativo bloqueado", color = Color.Gray)
 
         Spacer(modifier = Modifier.height(40.dp))
 
         PrimaryButton(
-            text = "Desbloquear",
+            text = "Usar senha do celular",
             trailingIcon = Icons.Outlined.Fingerprint,
             onClick = promptBiometrics
         )

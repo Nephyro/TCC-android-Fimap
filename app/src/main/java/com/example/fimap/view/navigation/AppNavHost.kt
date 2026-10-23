@@ -39,8 +39,6 @@ fun AppNavigation(
 ) {
     val navController = rememberNavController()
 
-    val startRoute = if (isBiometricEnabled) "unlock" else "login"
-
     NavHost(
         navController = navController,
         startDestination = startDestination

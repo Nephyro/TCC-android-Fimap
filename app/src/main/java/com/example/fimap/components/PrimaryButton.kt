@@ -1,5 +1,6 @@
 package com.example.fimap.components
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -21,7 +22,8 @@ fun PrimaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    trailingIcon: ImageVector? = null
+    trailingIcon: ImageVector? = null,
+    leadingIcon: ImageVector? = null
 ) {
     Button(
         onClick = onClick,
@@ -29,7 +31,6 @@ fun PrimaryButton(
             containerColor = Color.Black,
             contentColor = Color.White
         ),
-        modifier = modifier.width(250.dp),
         shape = RoundedCornerShape(10.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {

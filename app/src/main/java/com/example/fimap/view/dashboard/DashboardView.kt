@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +34,9 @@ fun DashboardScreen(
     val state by viewModel.uiState.collectAsState()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp, 30.dp, 0.dp, 0.dp),
         containerColor = Color.White,
         topBar = {
             FimapTopAppBar(
@@ -56,37 +57,20 @@ fun DashboardScreen(
                 .padding(horizontal = 20.dp, vertical = 16.dp)
                 .verticalScroll(scrollState)
                 .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
         ) {
-            // Cabeçalho abaixo da TopBar (Olá, Arthur)
+            // Cabeçalho abaixo da TopBar
+
             Text(
                 text = "Olá, ${state.userName}",
-                fontSize = 28.sp,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
             Text(
                 text = "Seu panorama consolidado",
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 color = Color.Gray
             )
-
-            PrimaryButton(
-                text = "Sair",
-                trailingIcon = Icons.Default.ArrowForward,
-                onClick = {
-                    viewModel.logout(
-                        onSuccess = {
-                            navController.navigate("login") {
-                                // Limpa absolutamente todo o histórico de telas
-                                popUpTo(0) { inclusive = true }
-                            }
-                        }
-                    )
-                }
-            )
-
 
 
 
